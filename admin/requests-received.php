@@ -126,6 +126,8 @@ if(strlen($_SESSION['alogin']) == 0) {
 
                                             ?>
                                         </td>
+
+                            
                                     </tr>
                                     <?php
                                             $cnt++;
@@ -173,10 +175,26 @@ if(strlen($_SESSION['alogin']) == 0) {
         }
 
         function deleteRequest(donorID) {
-            if (confirm("Are you sure you want to delete this request?")) {
-                window.location.href = "delete-request.php?SNo=" + donorID;
+    if (confirm("Are you sure you want to delete this request?")) {
+        $.ajax({
+            url: "delete-request.php",
+            type: "POST", // Change the request method to POST
+            data: { SNo: donorID },
+            success: function(response) {
+                if (response === "success") {
+                    // If deletion is successful, remove the deleted row from the table
+                    $("#row" + donorID).remove();
+                } else {
+                    console.log(response); // Log the error message for troubleshooting
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
             }
-        }
+        });
+    }
+}
+
     </script>
 </body>
 

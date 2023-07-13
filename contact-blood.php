@@ -133,12 +133,12 @@ if (isset($_POST['send'])) {
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                              <label for="recipient-name" class="col-form-label">Message</label>
                             <textarea rows="10" cols="100" class="form-control" id="message" name="message" placeholder="Please enter your message" maxlength="999" style="resize:none"></textarea>
-                        </div>
+                        </div> -->
                         <div class="form-group">
-                            <input type="submit" value="Send Message" name="send">
+                            <input type="submit" value="Send Request" name="send">
                         </div>
                     </form>
                 </div>
