@@ -190,13 +190,13 @@ foreach($results as $result)
 </div>
 </div>
 
-<div class="hr-dashed"></div>
+<!-- <div class="hr-dashed"></div>
 <div class="form-group">
 <label class="col-sm-2 control-label">Message<span style="color:red">*</span></label>
 <div class="col-sm-10">
 <textarea class="form-control" name="message" required> </textarea>
 </div>
-</div>
+</div> -->
 
 
 
