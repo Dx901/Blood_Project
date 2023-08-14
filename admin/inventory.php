@@ -2,9 +2,20 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0) {
+
+if (strlen($_SESSION['alogin']) == 0) {
     header('location:index.php');
 } else {
+    if (isset($_POST['newQuantity']) && isset($_POST['bloodGroupId'])) {
+        $newQuantity = intval($_POST['newQuantity']);
+        $bloodGroupId = intval($_POST['bloodGroupId']);
+
+        $sql = "UPDATE tblbloodcount SET Count = :newQuantity WHERE id = :bloodGroupId";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':newQuantity', $newQuantity, PDO::PARAM_INT);
+        $query->bindParam(':bloodGroupId', $bloodGroupId, PDO::PARAM_INT);
+        $query->execute();
+    }
 ?>
 
 <!doctype html>
@@ -20,17 +31,11 @@ if(strlen($_SESSION['alogin'])==0) {
 
     <title>BBDMS | Blood Inventory</title>
 
-    <!-- Font awesome -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <!-- Sandstone Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Bootstrap Datatables -->
     <link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
-    <!-- Bootstrap social button library -->
     <link rel="stylesheet" href="css/bootstrap-social.css">
-    <!-- Bootstrap select -->
     <link rel="stylesheet" href="css/bootstrap-select.css">
-    <!-- Admin Stye -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -72,16 +77,14 @@ if(strlen($_SESSION['alogin'])==0) {
                                     <tr>
                                         <th>#</th>
                                         <th>Blood Group</th>
-                                        <th>Quantity (in mL)</th>
-                                        <th>Action</th>
+                                        <th>Quantity (in Pints)</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>#</th>
                                         <th>Blood Group</th>
-                                        <th>Quantity (in mL)</th>
-                                        <th>Action</th>
+                                        <th>Quantity (in Pints)</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -96,10 +99,13 @@ if(strlen($_SESSION['alogin'])==0) {
                                             <tr>
                                                 <td><?php echo htmlentities($cnt); ?></td>
                                                 <td><?php echo htmlentities($result->BloodGroup); ?></td>
-                                                <td><?php echo htmlentities($result->Quantity); ?></td>
                                                 <td>
-                                                    <a href="edit-blood.php?id=<?php echo $result->id;?>" class="btn btn-primary btn-xs">Edit</a>
-                                                    <!-- <a href="delete-blood.php?id=<?php echo $result->id;?>" onclick="return confirm('Are you sure you want to delete?');" class="btn btn-danger btn-xs">Delete</a> -->
+                                                    <form class="update-form">
+                                                        <input type="hidden" name="bloodGroupId" value="<?php echo $result->id; ?>">
+                                                        <input type="number" class="quantity-input" name="newQuantity" value="<?php echo isset($_SESSION['quantity_' . $result->id]) ? $_SESSION['quantity_' . $result->id] : 0; ?>">
+                                                        <button type="submit" class="update-btn">Update</button>
+                                                        <button type="button" class="reset-btn">Reset</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         <?php $cnt=$cnt+1;
@@ -124,6 +130,65 @@ if(strlen($_SESSION['alogin'])==0) {
     <script src="js/fileinput.js"></script>
     <script src="js/chartData.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- JavaScript code for handling form submission and updating the quantity -->
+    <script>
+        $(document).ready(function () {
+            $(".update-form").submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var bloodGroupId = form.find("input[name=bloodGroupId]").val();
+                var newQuantity = form.find(".quantity-input").val();
+
+                localStorage.setItem("quantity_" + bloodGroupId, newQuantity);
+
+                $.ajax({
+                    type: "POST",
+                    url: "inventory.php",
+                    data: form.serialize(),
+                    success: function (response) {
+                        // Optionally handle success actions
+                    },
+                    error: function () {
+                        // Optionally handle error actions
+                    },
+                });
+
+                form.find(".update-btn").html("Updated");
+            });
+
+            $(".reset-btn").click(function () {
+                var form = $(this).closest(".update-form");
+                var bloodGroupId = form.find("input[name=bloodGroupId]").val();
+
+                form.find(".quantity-input").val(0);
+                localStorage.setItem("quantity_" + bloodGroupId, 0);
+
+                form.find(".update-btn").html("Update");
+            });
+
+            $(".quantity-input").on("input", function () {
+                var form = $(this).closest(".update-form");
+                var bloodGroupId = form.find("input[name=bloodGroupId]").val();
+                var updatedQuantity = parseInt($(this).val());
+
+                localStorage.setItem("quantity_" + bloodGroupId, updatedQuantity);
+                form.find(".update-btn").html("Update");
+            });
+
+            $(".update-form").each(function () {
+                var form = $(this);
+                var bloodGroupId = form.find("input[name=bloodGroupId]").val();
+                var savedQuantity = localStorage.getItem("quantity_" + bloodGroupId);
+                if (savedQuantity !== null) {
+                    form.find(".quantity-input").val(savedQuantity);
+                    form.find(".update-btn").html("Updated");
+                }
+            });
+
+            
+        });
+    </script>
 
 </body>
 

@@ -65,7 +65,7 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
 
 								
 
-									<button class="btn btn-primary btn-block" name="login" type="submit">LOGIN</button>
+									<button clas   s="btn btn-primary btn-block" name="login" type="submit">LOGIN</button>
 <a href="forgot-password.php" >Forgot Password</a>
 								</form>
 								<div class="card-footer text-center" style="padding-top: 30px;">

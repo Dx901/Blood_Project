@@ -27,22 +27,22 @@ SET time_zone = "+00:00";
 -- Table structure for table `tbladmin`
 --
 
--- CREATE TABLE `tbladmin` (
---   `ID` int(10) NOT NULL,
---   `AdminName` varchar(120) DEFAULT NULL,
---   `UserName` varchar(120) DEFAULT NULL,
---   `MobileNumber` bigint(10) DEFAULT NULL,
---   `Email` varchar(200) DEFAULT NULL,
---   `Password` varchar(200) DEFAULT NULL,
---   `AdminRegdate` timestamp NULL DEFAULT current_timestamp()
--- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `tbladmin` (
+  `ID` int(10) NOT NULL,
+  `AdminName` varchar(120) DEFAULT NULL,
+  `UserName` varchar(120) DEFAULT NULL,
+  `MobileNumber` bigint(10) DEFAULT NULL,
+  `Email` varchar(200) DEFAULT NULL,
+  `Password` varchar(200) DEFAULT NULL,
+  `AdminRegdate` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbladmin`
 --
 
--- INSERT INTO `tbladmin` (`ID`, `AdminName`, `UserName`, `MobileNumber`, `Email`, `Password`, `AdminRegdate`) VALUES
--- (1, 'Admin', 'admin', 8979555558, 'admin@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2022-07-28 04:36:52');
+INSERT INTO `tbladmin` (`ID`, `AdminName`, `UserName`, `MobileNumber`, `Email`, `Password`, `AdminRegdate`) VALUES
+(1, 'Admin', 'admin', 8979555558, 'admin@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2022-07-28 04:36:52');
 
 -- --------------------------------------------------------
 
